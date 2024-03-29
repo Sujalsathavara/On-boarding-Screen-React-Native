@@ -10,21 +10,35 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigation() {
   const [isFirstLaunch, setIsFirstLaunch] = useState(false);
 
-  useEffect(() => {
-    AsyncStorage.getItem("alreadyLaunched").then((value) => {
-      if (value === null) {
-        AsyncStorage.setItem("alreadyLaunched", "true");
+  const storeData = async (value) => {
+    try {
+      await AsyncStorage.setItem("alreadyLaunched", value);
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("alreadyLaunched");
+      if (value !== null) {
+        // value previously stored
+        storeData(true);
         setIsFirstLaunch(true);
       } else {
         setIsFirstLaunch(false);
       }
-    });
-  });
+    } catch (e) {
+      // error reading value
+    }
+  };
+
+  console.log(isFirstLaunch);
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {isFirstLaunch && (
+        {isFirstLaunch === false && (
           <Stack.Screen
             options={{ headerShown: false }}
             name="Onbording"
