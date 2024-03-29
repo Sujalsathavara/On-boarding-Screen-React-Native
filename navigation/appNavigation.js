@@ -19,20 +19,22 @@ export default function AppNavigation() {
         setIsFirstLaunch(false);
       }
     });
-  }, []);
+  });
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {isFirstLaunch && (
+          <Stack.Screen
+            options={{ headerShown: false }}
+            name="Onbording"
+            component={OnbordingScreensp}
+          />
+        )}
         <Stack.Screen
           name="Home"
           options={{ headerShown: false }}
           component={HomeScreen}
-        />
-        <Stack.Screen
-          name="Onbording"
-          options={{ headerShown: false }}
-          component={OnbordingScreensp}
         />
       </Stack.Navigator>
     </NavigationContainer>
