@@ -23,10 +23,10 @@ export default function AppNavigation() {
       const value = await AsyncStorage.getItem("alreadyLaunched");
       if (value !== null) {
         // value previously stored
-        storeData(true);
-        setIsFirstLaunch(true);
+        storeData("SP1");
+        setIsFirstLaunch("SP1");
       } else {
-        setIsFirstLaunch(false);
+        setIsFirstLaunch("SP0");
       }
     } catch (e) {
       // error reading value
@@ -38,7 +38,7 @@ export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {isFirstLaunch === false && (
+        {isFirstLaunch === "SP1" && (
           <Stack.Screen
             options={{ headerShown: false }}
             name="Onbording"
