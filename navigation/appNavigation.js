@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../Screens/HomeScreen";
+import LoginScreen from "../Auths/LoginScreen";
 import OnbordingScreensp from "../Screens/OnbordingScreen";
+import WelcomScreen from "../Auths/WelcomScreen";
+import SignupScreen from "../Auths/SignupScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
-  const [isFirstLaunch, setIsFirstLaunch] = useState(false);
+  const [isFirstLaunch, setIsFirstLaunch] = useState("SP0");
 
   const storeData = async (value) => {
     try {
@@ -38,7 +41,7 @@ export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {isFirstLaunch === "SP1" && (
+        {isFirstLaunch === "SP0" && (
           <Stack.Screen
             options={{ headerShown: false }}
             name="Onbording"
@@ -46,9 +49,19 @@ export default function AppNavigation() {
           />
         )}
         <Stack.Screen
-          name="Home"
+          name="Welcome"
           options={{ headerShown: false }}
-          component={HomeScreen}
+          component={WelcomScreen}
+        />
+        <Stack.Screen
+          name="Login"
+          options={{ headerShown: false }}
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name="Signup"
+          options={{ headerShown: false }}
+          component={SignupScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

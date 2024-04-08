@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./App.{js,jsx,ts,tsx}",
     "./Screens/**/*.{js,jsx,ts,tsx}",
+    "./Auths/**/*.{js,jsx,ts,tsx}",
     "./<custom-folder>/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {

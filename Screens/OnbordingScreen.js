@@ -17,7 +17,7 @@ export default function OnbordingScreensp() {
 
   const skdone = () => {
     storeData("SP1");
-    navigation.navigate("Home");
+    navigation.navigate("Welcome");
   };
 
   const DotComponent = ({ selected }) => {
