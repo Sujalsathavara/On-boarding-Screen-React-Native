@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Text,
   View,
@@ -9,18 +9,18 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import skThem from "../them";
-import { ArrowLeftIcon } from "react-native-heroicons/solid";
+import * as Icons from "react-native-heroicons/solid";
+// import { ArrowLeftIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome, {
-  SolidIcons,
-  RegularIcons,
-  BrandIcons,
-} from "react-native-fontawesome";
+
+import SkapiManager from "../API/Skapimanager";
 
 export default function SignupScreen() {
   const navigation = useNavigation();
 
   const scrollViewRef = useRef();
+
+  // const splogin = () => {};
 
   const autoScroll = () => {
     let offset = 0;
@@ -29,7 +29,21 @@ export default function SignupScreen() {
       scrollViewRef.current?.scrollTo({ x: 0, y: offset, animated: true });
     }, 1000);
   };
+  const [name, setName] = useState("");
+  const [nameVerify, setNameVerify] = useState(false);
+  const [email, setEmail] = useState("");
+  const [emailVerify, setEmailVerify] = useState(false);
 
+  function handleName(e) {
+    const namesp = e.nativeEvent.text;
+    setName(namesp);
+
+    if (namesp.length > 1) {
+      setNameVerify(true);
+    } else {
+      setNameVerify(false);
+    }
+  }
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex">
@@ -40,7 +54,7 @@ export default function SignupScreen() {
             }}
             className="p-2 rounded-tr-2xl rounded-br-2xl ml-0 mt-1"
             style={{ backgroundColor: skThem.skButton }}>
-            <ArrowLeftIcon
+            <Icons.ArrowLeftIcon
               size="20"
               strokeWidth={2}
               style={{ color: skThem.skWhite }}
@@ -75,6 +89,7 @@ export default function SignupScreen() {
               className="p-2 bg-gray-100  rounded-2xl mb-2"
               style={{ color: skThem.skButton }}
               placeholder="Full Name"
+              onChange={(e) => handleName(e)}
             />
 
             <Text className="text-white ml-2">Email Address</Text>
@@ -82,6 +97,13 @@ export default function SignupScreen() {
               className="p-2 bg-gray-100  rounded-2xl mb-2"
               style={{ color: skThem.skButton }}
               placeholder="Enter Email Address"
+            />
+
+            <Text className="text-white ml-2">Mobile Number</Text>
+            <TextInput
+              className="p-2 bg-gray-100  rounded-2xl mb-2"
+              style={{ color: skThem.skButton }}
+              placeholder="Enter Mobile Number 10 DIGIT"
             />
 
             <Text className="text-white ml-2">Password</Text>
