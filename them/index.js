@@ -4,6 +4,8 @@ const skThem = {
   skButton: "#282172",
   skcolor: "#FF055C9D",
   skpbutton: "#F8EBD8",
+  skIcong: "green",
+  skIconr: "red",
 };
 
 export default skThem;

@@ -6,6 +6,7 @@ import {
   Image,
   TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import skThem from "../them";
@@ -14,6 +15,14 @@ import * as Icons from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 
 import SkapiManager from "../API/Skapimanager";
+import Toast from "react-native-simple-toast";
+import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
+
+function validateEmail(email) {
+  const re =
+    /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+  return re.test(email.toLowerCase());
+}
 
 export default function SignupScreen() {
   const navigation = useNavigation();
@@ -30,20 +39,47 @@ export default function SignupScreen() {
     }, 1000);
   };
   const [name, setName] = useState("");
-  const [nameVerify, setNameVerify] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailVerify, setEmailVerify] = useState(false);
+  const [phonenumber, setPhoneNumber] = useState("");
 
-  function handleName(e) {
-    const namesp = e.nativeEvent.text;
-    setName(namesp);
-
-    if (namesp.length > 1) {
-      setNameVerify(true);
-    } else {
-      setNameVerify(false);
+  const handleSignupsp = () => {
+    if (!name) {
+      Toast.showWithGravity(
+        "PLease Enter Valid Name",
+        Toast.LONG,
+        Toast.BOTTOM
+      );
+      return;
     }
-  }
+
+    if (!email) {
+      Toast.showWithGravity(
+        "PLease Enter Valid Email",
+        Toast.LONG,
+        Toast.BOTTOM
+      );
+      return;
+    }
+
+    if (validateEmail(email) === false) {
+      Toast.showWithGravity(
+        "PLease Enter Valid Email",
+        Toast.LONG,
+        Toast.BOTTOM
+      );
+      return;
+    }
+
+    if (!phonenumber) {
+      Toast.showWithGravity(
+        "PLease Enter Valid Phone Number",
+        Toast.LONG,
+        Toast.BOTTOM
+      );
+      return;
+    }
+  };
+
   return (
     <View className="flex-1 bg-white">
       <SafeAreaView className="flex">
@@ -89,7 +125,7 @@ export default function SignupScreen() {
               className="p-2 bg-gray-100  rounded-2xl mb-2"
               style={{ color: skThem.skButton }}
               placeholder="Full Name"
-              onChange={(e) => handleName(e)}
+              onChange={(e) => setName(e.nativeEvent.text)}
             />
 
             <Text className="text-white ml-2">Email Address</Text>
@@ -97,13 +133,36 @@ export default function SignupScreen() {
               className="p-2 bg-gray-100  rounded-2xl mb-2"
               style={{ color: skThem.skButton }}
               placeholder="Enter Email Address"
+              onChange={(e) => setEmail(e.nativeEvent.text)}
             />
 
             <Text className="text-white ml-2">Mobile Number</Text>
-            <TextInput
+            <PhoneInput
+              defaultValue={phonenumber}
+              defaultCode="IN"
+              onChangeFormattedText={(text) => {
+                isValidNumber(text) ? setPhoneNumber(text) : text;
+                console.log(text);
+              }}
               className="p-2 bg-gray-100  rounded-2xl mb-2"
               style={{ color: skThem.skButton }}
-              placeholder="Enter Mobile Number 10 DIGIT"
+              layout="first"
+              containerStyle={{
+                width: "100%",
+                marginTop: 8,
+                borderRadius: 20,
+                height: 50,
+              }}
+              textContainerStyle={{
+                marginBottom: 0,
+                paddingBottom: 0,
+                marginTop: 0,
+                paddingTop: 0,
+                borderRadius: 20,
+              }}
+              disableArrowIcon
+              placeholder="Enter Mobile Number"
+              keyboardType={"phone-pad"}
             />
 
             <Text className="text-white ml-2">Password</Text>
@@ -111,6 +170,7 @@ export default function SignupScreen() {
               className="p-2 bg-gray-100 rounded-2xl"
               style={{ color: skThem.skButton }}
               secureTextEntry
+              icon={<Text>Show</Text>}
               placeholder="Enter Password"
             />
             <TouchableOpacity className="flex items-end mb-2">
@@ -118,7 +178,8 @@ export default function SignupScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               className="py-3 rounded-xl"
-              style={{ backgroundColor: skThem.skpbutton }}>
+              style={{ backgroundColor: skThem.skpbutton }}
+              onPress={handleSignupsp}>
               <Text
                 className="font-xl font-bold text-center"
                 style={{ color: skThem.skButton }}>
