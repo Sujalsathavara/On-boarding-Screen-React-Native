@@ -41,7 +41,8 @@ export default function SignupScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phonenumber, setPhoneNumber] = useState("");
-
+  const [passwords, setPasswords] = useState("");
+  const [pass, setPass] = useState(true);
   const handleSignupsp = () => {
     if (!name) {
       Toast.showWithGravity(
@@ -127,7 +128,8 @@ export default function SignupScreen() {
               placeholder="Full Name"
               onChange={(e) => setName(e.nativeEvent.text)}
             />
-
+          </View>
+          <View className="form space-y-2">
             <Text className="text-white ml-2">Email Address</Text>
             <TextInput
               className="p-2 bg-gray-100  rounded-2xl mb-2"
@@ -135,7 +137,8 @@ export default function SignupScreen() {
               placeholder="Enter Email Address"
               onChange={(e) => setEmail(e.nativeEvent.text)}
             />
-
+          </View>
+          <View className="form space-y-2">
             <Text className="text-white ml-2">Mobile Number</Text>
             <PhoneInput
               defaultValue={phonenumber}
@@ -164,15 +167,46 @@ export default function SignupScreen() {
               placeholder="Enter Mobile Number"
               keyboardType={"phone-pad"}
             />
-
-            <Text className="text-white ml-2">Password</Text>
+          </View>
+          <View className="form space-y-2">
+            <Text className="text-white ml-2 mt-2">Password</Text>
             <TextInput
               className="p-2 bg-gray-100 rounded-2xl"
               style={{ color: skThem.skButton }}
-              secureTextEntry
-              icon={<Text>Show</Text>}
+              secureTextEntry={pass}
               placeholder="Enter Password"
+              onPress={() => {
+                pass ? setPass(false) : setPass(true);
+              }}
             />
+
+            {pass === true ? (
+              <Icons.EyeIcon
+                style={{
+                  position: "absolute",
+                  right: 20,
+                  top: 39,
+                  color: skThem.skButton,
+                }}
+                onPress={() => {
+                  pass ? setPass(false) : setPass(true);
+                }}
+              />
+            ) : (
+              <Icons.EyeSlashIcon
+                style={{
+                  position: "absolute",
+                  right: 20,
+                  top: 39,
+                  color: skThem.skButton,
+                }}
+                onPress={() => {
+                  pass ? setPass(false) : setPass(true);
+                }}
+              />
+            )}
+          </View>
+          <View className="form space-y-2">
             <TouchableOpacity className="flex items-end mb-2">
               <Text className="text-white">Forgot Password?</Text>
             </TouchableOpacity>
