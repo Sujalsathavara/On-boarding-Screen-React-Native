@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   Text,
   View,
@@ -17,6 +17,9 @@ import { useNavigation } from "@react-navigation/native";
 import SkapiManager from "../API/Skapimanager";
 import Toast from "react-native-simple-toast";
 import PhoneInput, { isValidNumber } from "react-native-phone-number-input";
+import Spinner from "react-native-loading-spinner-overlay";
+
+import axios from "axios";
 
 function validateEmail(email) {
   const re =
@@ -43,6 +46,7 @@ export default function SignupScreen() {
   const [phonenumber, setPhoneNumber] = useState("");
   const [passwords, setPasswords] = useState("");
   const [pass, setPass] = useState(true);
+
   const handleSignupsp = () => {
     if (!name) {
       Toast.showWithGravity(
@@ -79,6 +83,47 @@ export default function SignupScreen() {
       );
       return;
     }
+
+    if (passwords.length < 6) {
+      Toast.showWithGravity(
+        "Password should be at least 6 characters long",
+        Toast.LONG,
+        Toast.BOTTOM
+      );
+      return;
+    }
+
+    let data = new FormData();
+    data.append(
+      "registerFreeEnterpriserUser",
+      '{"lastName":"test","state":"","subscriptionType":"Free Trial","email":"' +
+        email +
+        '","securityQuesId":"","password":"ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413","termsCondition":"","optIn":"","hearFrom":"","userName":"","firstName":"' +
+        name +
+        '","city":"","currency_id":"","industryId":"30","jobtitle":"","country":"","registerType":"E","securityAnswer":"","phone":"' +
+        phonenumber +
+        '","zipCode":"","ip":"","event_organizer_type":"","mobilePlatform":"Andorid"}'
+    );
+
+    let configsp = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://www.myleadssite.com/MLeads9.7.22/registerFreeTrialEnterpriseUser.php",
+      headers: {
+        Accept: "application/json, text/plain, /",
+        "Content-Type": "multipart/form-data",
+      },
+      data: data,
+    };
+
+    axios
+      .request(configsp)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -178,6 +223,7 @@ export default function SignupScreen() {
               onPress={() => {
                 pass ? setPass(false) : setPass(true);
               }}
+              onChange={(e) => setPasswords(e.nativeEvent.text)}
             />
 
             {pass === true ? (
@@ -221,10 +267,10 @@ export default function SignupScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-          <Text className="text-xl text-white font-bold text-center py-3">
+          {/* <Text className="text-xl text-white font-bold text-center py-3">
             Or
-          </Text>
-          <View className="flex-row justify-center space-x-12">
+          </Text> */}
+          {/* <View className="flex-row justify-center space-x-12">
             <TouchableOpacity className="p-2 bg-white rounded-2xl">
               <Image
                 source={require("../assets/images/google.png")}
@@ -237,8 +283,8 @@ export default function SignupScreen() {
                 className="w-8 h-8"
               />
             </TouchableOpacity>
-          </View>
-          <View className="flex-row justify-center mt-7">
+          </View> */}
+          <View className="flex-row justify-center mt-7 items-end">
             <Text className="text-white font-semibold">
               Already have an account?
             </Text>
